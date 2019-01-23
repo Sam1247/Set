@@ -34,16 +34,7 @@ class Set {
     }
     
     func chooseCard(at index: Int) {
-        if selectedCards.count < 3 {
-            selectedCards.append(deck.remove(at: index))
-        } else {
-            selectedCards.removeAll()
-            selectedCards.append(deck.remove(at: index))
-        }
         
-        if selectedCards.count == 3 {
-            //isMatched(selectedCards[0], selectedCards[1], selectedCards[2])
-        }
     }
     
     private func isMatched (_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {

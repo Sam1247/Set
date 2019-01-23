@@ -40,4 +40,5 @@ extension Card: Equatable {
                 (lhs.shading == rhs.shading)
         )
     }
+    
 }
