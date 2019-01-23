@@ -11,6 +11,7 @@ import Foundation
 class Set {
     
     var deck = [Card]()
+    
     var selectedCards = [Card]()
     
     init() {

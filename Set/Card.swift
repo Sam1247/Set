@@ -10,6 +10,13 @@ import Foundation
 
 struct Card {
     
+    init(number: varient, color: varient, symbol: varient, shading: varient) {
+        self.number = number
+        self.color = color
+        self.symbol = symbol
+        self.shading = shading
+    }
+
     enum varient: Int {
         case one = 1, two, three
     }
@@ -21,12 +28,6 @@ struct Card {
     let symbol: varient
     let shading: varient
     
-    init(number: varient, color: varient, symbol: varient, shading: varient) {
-        self.number = number
-        self.color = color
-        self.symbol = symbol
-        self.shading = shading
-    }
     
 }
 
