@@ -14,6 +14,8 @@ class Set {
     
     var selectedCards = [Card]()
     
+    var playingCards = [Card]()
+    
     init() {
         for number in 1...3 {
             for color in 1...3 {
@@ -32,7 +34,16 @@ class Set {
     }
     
     func chooseCard(at index: Int) {
-        selectedCards.append(deck.remove(at: index))
+        if selectedCards.count < 3 {
+            selectedCards.append(deck.remove(at: index))
+        } else {
+            selectedCards.removeAll()
+            selectedCards.append(deck.remove(at: index))
+        }
+        
+        if selectedCards.count == 3 {
+            //isMatched(selectedCards[0], selectedCards[1], selectedCards[2])
+        }
     }
     
     private func isMatched (_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
@@ -53,4 +64,16 @@ class Set {
         return false
     }
     
+}
+
+
+extension Array {
+    public mutating func shuffle () {
+        for i in stride(from: count - 1, to: 1, by: -1) {
+            let random = Int(arc4random_uniform(UInt32(i+1)))
+            if i != random {
+                self.swapAt(i, random)
+            }
+        }
+    }
 }
