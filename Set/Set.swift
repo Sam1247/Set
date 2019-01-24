@@ -10,31 +10,41 @@ import Foundation
 
 class Set {
     
-    var deck = [Card]()
+    private(set) var score = 0
     
-    var selectedCards = [Card]()
+    private var deck = [Card]()
     
-    var playingCards = [Card]()
+    private var playingCards = [Card]()
     
     init() {
         for number in 1...3 {
             for color in 1...3 {
                 for symbol in 1...3 {
                     for shading in 1...3 {
-                        deck.append(Card(
-                            number: Card.varient(rawValue: number)!,
-                            color: Card.varient(rawValue: color)!,
-                            symbol: Card.varient(rawValue: symbol)!,
-                            shading: Card.varient(rawValue: shading)!)
+                        deck.append(
+                            Card(
+                                number: Card.varient(rawValue: number)!,
+                                color: Card.varient(rawValue: color)!,
+                                symbol: Card.varient(rawValue: symbol)!,
+                                shading: Card.varient(rawValue: shading)!
+                            )
                         )
                     }
                 }
             }
         }
+        deck.shuffle()
+        for _ in 0..<12 {
+            playingCards.append(deck.remove(at: 0))
+        }
     }
     
-    func chooseCard(at index: Int) {
-        
+    func dealMoreCards () -> [Card] {
+        var moreThreeCards = [Card]()
+        for _ in 0..<3 {
+            moreThreeCards.append(deck.remove(at: 0))
+        }
+        return moreThreeCards
     }
     
     private func isMatched (_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
