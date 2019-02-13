@@ -14,7 +14,7 @@ class Set {
     
     private var deck = [Card]()
     
-    private var playingCards = [Card]()
+    var playingCards = [Card]()
     
     init() {
         for number in 1...3 {
@@ -39,11 +39,14 @@ class Set {
         }
     }
     
-    func dealMoreCards () -> [Card] {
+    func dealMoreCards (numberOfCards: Int) -> [Card] {
         var moreThreeCards = [Card]()
-        for _ in 0..<3 {
-            moreThreeCards.append(deck.remove(at: 0))
+        for _ in 0..<numberOfCards {
+            if !deck.isEmpty {
+                moreThreeCards.append(deck.removeFirst())
+            }
         }
+        playingCards += moreThreeCards
         return moreThreeCards
     }
     
@@ -61,6 +64,7 @@ class Set {
             (card1.number != card1.number && card2.number != card2.number && card3.number != card3.number))
         {
             return true
+            //removing the matched cards
         }
         return false
     }

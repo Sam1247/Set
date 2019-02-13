@@ -10,20 +10,29 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet var playingCards: [UIButton]!
+    @IBOutlet var playingCards: [SetCard]!
     @IBOutlet weak var scoreLabel: UILabel!
+    
+    var selectedCards = [Card]()
     
     var game = Set()
     
-    @IBAction func touchCard(_ sender: UIButton) {
+    var setCards = [Int:Card]()
+    
+    // TODO:
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func touchCard(_ sender: SetCard) {
+        sender.setState(state: SetCard.SelectionState.selected)
+    }
+    
+    @IBAction func deal(_ sender: SetCard) {
         
     }
     
-    @IBAction func deal(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction func newGame(_ sender: UIButton) {
+    @IBAction func newGame(_ sender: SetCard) {
     }
     
     
