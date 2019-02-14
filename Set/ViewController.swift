@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     
     var game = Set()
     
+    var wasMatchedLastGame = false
+    
     var setCards = [Int:Card]()
     
     // TODO:
@@ -33,12 +35,33 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchCard(_ sender: SetCard) {
-        if (selectedCards.count < 3) {
+        if selectedCards.count < 3 {
             let index = playingCards.index(of: sender)!
             if playingCards[index].selectionState == .selected {
                 playingCards[index].setState(state: .deselected)
+                selectedCards.removeLast()
+                print(selectedCards.count)
             } else {
                 playingCards[index].setState(state: .selected)
+                selectedCards.append(playingCards[index])
+                if (wasMatchedLastGame) {
+                    game.dealMoreCards()
+                    updateViewFromModel()
+                    wasMatchedLastGame = false
+                }
+                if selectedCards.count == 3 {
+                    let index1 = playingCards.index(of: selectedCards[0])!
+                    let index2 = playingCards.index(of: selectedCards[1])!
+                    let index3 = playingCards.index(of: selectedCards[2])!
+                    if game.isMatched(index1, index2, index3) {
+                        playingCards[index1].setState(state: .matched)
+                        playingCards[index2].setState(state: .matched)
+                        playingCards[index3].setState(state: .matched)
+                        selectedCards.removeAll()
+                        wasMatchedLastGame = true
+                    }
+                }
+                print(selectedCards.count)
             }
         }
         
@@ -47,6 +70,7 @@ class ViewController: UIViewController {
     @IBAction func deal(_ sender: SetCard) {
         game.dealMoreCards()
         updateViewFromModel()
+        wasMatchedLastGame = false
     }
     
     @IBAction func newGame(_ sender: SetCard) {
