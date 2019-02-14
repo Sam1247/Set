@@ -29,10 +29,12 @@ class SetCard: UIButton {
             self.layer.borderColor = UIColor.cyan.cgColor
         case .deleted:
             selectionState = .deleted
+            self.setAttributedTitle(nil, for: .normal)
             self.setTitle("", for: UIControl.State.normal)
             self.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
             self.layer.borderWidth = 0
         case .deselected:
+            selectionState = .deselected
             self.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
             self.layer.borderWidth = 0
         }

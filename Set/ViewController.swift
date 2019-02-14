@@ -15,18 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var DealButton: SetCard!
     @IBOutlet weak var newGameButton: UIButton!
     
-    var selectedCards = [SetCard]() {
-        didSet {
-            if selectedCards.count == 3 {
-                for card in playingCards {
-                    if card.selectionState == .selected {
-                        card.setState(state: .deleted)
-                    }
-                }
-                selectedCards.removeAll()
-            }
-        }
-    }
+    var selectedCards = [SetCard]()
     
     var game = Set()
     
@@ -40,32 +29,37 @@ class ViewController: UIViewController {
         }
         DealButton.layer.cornerRadius = 5
         newGameButton.layer.cornerRadius = 5
-        drawAllCards()
+        updateViewFromModel()
     }
     
     @IBAction func touchCard(_ sender: SetCard) {
-        sender.setState(state: SetCard.SelectionState.selected)
-        selectedCards.append(sender)
+        if (selectedCards.count < 3) {
+            let index = playingCards.index(of: sender)!
+            if playingCards[index].selectionState == .selected {
+                playingCards[index].setState(state: .deselected)
+            } else {
+                playingCards[index].setState(state: .selected)
+            }
+        }
+        
     }
     
     @IBAction func deal(_ sender: SetCard) {
         game.dealMoreCards()
-        drawAllCards()
+        updateViewFromModel()
     }
     
     @IBAction func newGame(_ sender: SetCard) {
+        game = Set()
+        updateViewFromModel()
     }
-    
     
     func updateViewFromModel () {
-        
-    }
-    
-    func drawAllCards () {
         for index in playingCards.indices {
             if game.showingPlayingCards[index] == nil {
                 playingCards[index].setState(state: .deleted)
-            } else {
+            }
+            else if !(playingCards[index].selectionState == .selected) {
                 playingCards[index].setState(state: .deselected)
                 let text: String
                 let font = UIFont.systemFont(ofSize: 30)
@@ -107,27 +101,27 @@ class ViewController: UIViewController {
                 case .one:
                     switch  game.showingPlayingCards[index]!.shading {
                     case .one:
-                        attributes[.foregroundColor] = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).withAlphaComponent(0.25)
+                        attributes[.foregroundColor] = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).withAlphaComponent(0.1)
                     case .two:
-                        attributes[.foregroundColor] = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).withAlphaComponent(0.65)
+                        attributes[.foregroundColor] = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).withAlphaComponent(0.5)
                     case .three:
                         attributes[.foregroundColor] = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1).withAlphaComponent(1.0)
                     }
                 case .two:
                     switch  game.showingPlayingCards[index]!.shading {
                     case .one:
-                        attributes[.foregroundColor] = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1).withAlphaComponent(0.25)
+                        attributes[.foregroundColor] = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1).withAlphaComponent(0.1)
                     case .two:
-                        attributes[.foregroundColor] = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1).withAlphaComponent(0.65)
+                        attributes[.foregroundColor] = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1).withAlphaComponent(0.5)
                     case .three:
                         attributes[.foregroundColor] = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1).withAlphaComponent(1.0)
                     }
                 case .three:
                     switch  game.showingPlayingCards[index]!.shading {
                     case .one:
-                        attributes[.foregroundColor] = #colorLiteral(red: 0, green: 1, blue: 0, alpha: 1).withAlphaComponent(0.25)
+                        attributes[.foregroundColor] = #colorLiteral(red: 0, green: 1, blue: 0, alpha: 1).withAlphaComponent(0.1)
                     case .two:
-                        attributes[.foregroundColor] = #colorLiteral(red: 0, green: 1, blue: 0, alpha: 1).withAlphaComponent(0.65)
+                        attributes[.foregroundColor] = #colorLiteral(red: 0, green: 1, blue: 0, alpha: 1).withAlphaComponent(0.5)
                     case .three:
                         attributes[.foregroundColor] = #colorLiteral(red: 0, green: 1, blue: 0, alpha: 1).withAlphaComponent(1.0)
                     }
