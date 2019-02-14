@@ -13,7 +13,18 @@ class ViewController: UIViewController {
     @IBOutlet var playingCards: [SetCard]!
     @IBOutlet weak var scoreLabel: UILabel!
     
-    var selectedCards = [Card]()
+    var selectedCards = [SetCard]() {
+        didSet {
+            if selectedCards.count == 3 {
+                for card in playingCards {
+                    if card.selectionState == .selected {
+                        card.setState(state: .deleted)
+                    }
+                }
+                selectedCards.removeAll()
+            }
+        }
+    }
     
     var game = Set()
     
@@ -22,10 +33,14 @@ class ViewController: UIViewController {
     // TODO:
     override func viewDidLoad() {
         super.viewDidLoad()
+        for index in 0..<playingCards.count {
+            playingCards[index].layer.cornerRadius = 5
+        }
     }
     
     @IBAction func touchCard(_ sender: SetCard) {
         sender.setState(state: SetCard.SelectionState.selected)
+        selectedCards.append(sender)
     }
     
     @IBAction func deal(_ sender: SetCard) {
@@ -37,8 +52,6 @@ class ViewController: UIViewController {
     
     
     func updateViewFromModel () {
-        
-        
         
     }
     

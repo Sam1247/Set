@@ -11,10 +11,10 @@ import UIKit
 class SetCard: UIButton {
     
     enum SelectionState {
-        case noChange, selected, matched, deleted
+        case deselected, selected, matched, deleted
     }
     
-    var selectionState: SelectionState = .noChange
+    var selectionState: SelectionState = .deselected
     
     
     func setState(state: SelectionState) {
@@ -31,8 +31,10 @@ class SetCard: UIButton {
             selectionState = .deleted
             self.setTitle("", for: UIControl.State.normal)
             self.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
-        default:
-            break
+            self.layer.borderWidth = 0
+        case .deselected:
+            self.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            self.layer.borderWidth = 0
         }
     }
     

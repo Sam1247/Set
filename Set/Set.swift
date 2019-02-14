@@ -10,10 +10,7 @@ import Foundation
 
 class Set {
     
-    private(set) var score = 0
-    
-    private var deck = [Card]()
-    
+    var deck = [Card]()
     var playingCards = [Card]()
     
     init() {
@@ -39,46 +36,29 @@ class Set {
         }
     }
     
-    func dealMoreCards (numberOfCards: Int) -> [Card] {
-        var moreThreeCards = [Card]()
-        for _ in 0..<numberOfCards {
-            if !deck.isEmpty {
-                moreThreeCards.append(deck.removeFirst())
-            }
+    func dealMoreCards () {
+        assert(deck.count < 3, "the dick is Empty")
+        for _ in 0..<3 {
+            playingCards.append(deck.removeFirst())
         }
-        playingCards += moreThreeCards
-        return moreThreeCards
     }
     
-    private func isMatched (_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
-        
-        // checking matching regardling to game rules
-        
-        if ((card1.color == card1.color && card2.color == card2.color && card3.color == card3.color) ||
-            (card1.color != card1.color && card2.color != card2.color && card3.color != card3.color)) &&
-            ((card1.symbol == card1.symbol && card2.symbol == card2.symbol && card3.symbol == card3.symbol) ||
-            (card1.symbol != card1.symbol && card2.symbol != card2.symbol && card3.symbol != card3.symbol)) &&
-            ((card1.shading == card1.shading && card2.shading == card2.shading && card3.shading == card3.shading) ||
-            (card1.shading != card1.shading && card2.shading != card2.shading && card3.shading != card3.shading)) &&
-            ((card1.number == card1.number && card2.number == card2.number && card3.number == card3.number) ||
-            (card1.number != card1.number && card2.number != card2.number && card3.number != card3.number))
+    func isMatched (_ index1: Int, _ index2: Int, _ index3: Int) -> Bool {
+        if ((playingCards[index1].color == playingCards[index1].color && playingCards[index2].color == playingCards[index2].color && playingCards[index3].color == playingCards[index3].color) ||
+            (playingCards[index1].color != playingCards[index1].color && playingCards[index2].color != playingCards[index2].color && playingCards[index3].color != playingCards[index3].color)) &&
+            ((playingCards[index1].symbol == playingCards[index1].symbol && playingCards[index2].symbol == playingCards[index2].symbol && playingCards[index3].symbol == playingCards[index3].symbol) ||
+            (playingCards[index1].symbol != playingCards[index1].symbol && playingCards[index2].symbol != playingCards[index2].symbol && playingCards[index3].symbol != playingCards[index3].symbol)) &&
+            ((playingCards[index1].shading == playingCards[index1].shading && playingCards[index2].shading == playingCards[index2].shading && playingCards[index3].shading == playingCards[index3].shading) ||
+            (playingCards[index1].shading != playingCards[index1].shading && playingCards[index2].shading != playingCards[index2].shading && playingCards[index3].shading != playingCards[index3].shading)) &&
+            ((playingCards[index1].number == playingCards[index1].number && playingCards[index2].number == playingCards[index2].number && playingCards[index3].number == playingCards[index3].number) ||
+            (playingCards[index1].number != playingCards[index1].number && playingCards[index2].number != playingCards[index2].number && playingCards[index3].number != playingCards[index3].number))
         {
+            playingCards.remove(at: index1)
+            playingCards.remove(at: index2)
+            playingCards.remove(at: index3)
             return true
-            //removing the matched cards
         }
         return false
     }
     
-}
-
-
-extension Array {
-    public mutating func shuffle () {
-        for i in stride(from: count - 1, to: 1, by: -1) {
-            let random = Int(arc4random_uniform(UInt32(i+1)))
-            if i != random {
-                self.swapAt(i, random)
-            }
-        }
-    }
 }
