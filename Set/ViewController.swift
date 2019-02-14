@@ -12,7 +12,16 @@ class ViewController: UIViewController {
     
     @IBOutlet var playingCards: [SetCard]!
     @IBOutlet weak var scoreLabel: UILabel!
-    @IBOutlet weak var DealButton: SetCard!
+    @IBOutlet weak var dealButton: SetCard!
+//    {
+//        didSet {
+//            let deletedCards = playingCards.filter { $0.selectionState == .deleted }
+//            print(deletedCards.count)
+//            if deletedCards.count == 0 {
+//                DealButton.isEnabled = false
+//            }
+//        }
+//    }
     @IBOutlet weak var newGameButton: UIButton!
     
     var selectedCards = [SetCard]()
@@ -23,13 +32,12 @@ class ViewController: UIViewController {
     
     var setCards = [Int:Card]()
     
-    // TODO:
     override func viewDidLoad() {
         super.viewDidLoad()
         for index in 0..<playingCards.count {
             playingCards[index].layer.cornerRadius = 5
         }
-        DealButton.layer.cornerRadius = 5
+        dealButton.layer.cornerRadius = 5
         newGameButton.layer.cornerRadius = 5
         updateViewFromModel()
     }
@@ -58,10 +66,13 @@ class ViewController: UIViewController {
                         playingCards[index2].setState(state: .matched)
                         playingCards[index3].setState(state: .matched)
                         selectedCards.removeAll()
+                        if (game.deck.count != 0){
+                            dealButton.isEnabled = true
+                        }
                         wasMatchedLastGame = true
                     }
                 }
-                print(selectedCards.count)
+                print(game.deck.count)
             }
         }
         
@@ -71,6 +82,10 @@ class ViewController: UIViewController {
         game.dealMoreCards()
         updateViewFromModel()
         wasMatchedLastGame = false
+        let deletedCards = playingCards.filter { $0.selectionState == .deleted }
+        if deletedCards.count == 0 || game.deck.count == 0 {
+            dealButton.isEnabled = false
+        }
     }
     
     @IBAction func newGame(_ sender: SetCard) {
