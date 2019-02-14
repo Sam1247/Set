@@ -33,7 +33,7 @@ class SetCard: UIButton {
             self.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0)
             self.layer.borderWidth = 0
         case .deselected:
-            self.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            self.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
             self.layer.borderWidth = 0
         }
     }

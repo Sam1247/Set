@@ -11,7 +11,7 @@ import Foundation
 class Set {
     
     var deck = [Card]()
-    var playingCards = [Card?](repeating: nil, count: 25)
+    var showingPlayingCards = [Card?](repeating: nil, count: 24)
     
     init() {
         for number in 1...3 {
@@ -30,38 +30,42 @@ class Set {
                 }
             }
         }
+        //print(deck.count)
         deck.shuffle()
         for i in 0..<12 {
-            playingCards[i] = deck.remove(at: 0)
+            showingPlayingCards[i] = deck.remove(at: 0)
         }
+        //print(deck.count)
     }
     
     func dealMoreCards () {
-        assert(deck.count < 3, "the dick is Empty")
-        for card in playingCards {
+        assert(deck.count >= 3, "the dick is Empty")
+        print(deck.count)
+        for card in showingPlayingCards {
             if card == nil {
-                let index = playingCards.index(of: card)!
-                playingCards[index] = deck.remove(at: 0)
-                playingCards[index+1] = deck.remove(at: 0)
-                playingCards[index+2] = deck.remove(at: 0)
+                let index = showingPlayingCards.index(of: card)!
+                showingPlayingCards[index] = deck.remove(at: 0)
+                showingPlayingCards[index+1] = deck.remove(at: 0)
+                showingPlayingCards[index+2] = deck.remove(at: 0)
+                break
             }
         }
     }
     
     func isMatched (_ index1: Int, _ index2: Int, _ index3: Int) -> Bool {
         
-        if ((playingCards[index1]!.color == playingCards[index1]!.color && playingCards[index2]!.color == playingCards[index2]!.color && playingCards[index3]!.color == playingCards[index3]!.color) ||
-            (playingCards[index1]!.color != playingCards[index1]!.color && playingCards[index2]!.color != playingCards[index2]!.color && playingCards[index3]!.color != playingCards[index3]!.color)) &&
-            ((playingCards[index1]!.symbol == playingCards[index1]!.symbol && playingCards[index2]!.symbol == playingCards[index2]!.symbol && playingCards[index3]!.symbol == playingCards[index3]!.symbol) ||
-            (playingCards[index1]!.symbol != playingCards[index1]!.symbol && playingCards[index2]!.symbol != playingCards[index2]!.symbol && playingCards[index3]!.symbol != playingCards[index3]!.symbol)) &&
-            ((playingCards[index1]!.shading == playingCards[index1]!.shading && playingCards[index2]!.shading == playingCards[index2]!.shading && playingCards[index3]!.shading == playingCards[index3]!.shading) ||
-            (playingCards[index1]!.shading != playingCards[index1]!.shading && playingCards[index2]!.shading != playingCards[index2]!.shading && playingCards[index3]!.shading != playingCards[index3]!.shading)) &&
-            ((playingCards[index1]!.number == playingCards[index1]!.number && playingCards[index2]!.number == playingCards[index2]!.number && playingCards[index3]!.number == playingCards[index3]!.number) ||
-            (playingCards[index1]!.number != playingCards[index1]!.number && playingCards[index2]!.number != playingCards[index2]!.number && playingCards[index3]!.number != playingCards[index3]!.number))
+        if ((showingPlayingCards[index1]!.color == showingPlayingCards[index1]!.color && showingPlayingCards[index2]!.color == showingPlayingCards[index2]!.color && showingPlayingCards[index3]!.color == showingPlayingCards[index3]!.color) ||
+            (showingPlayingCards[index1]!.color != showingPlayingCards[index1]!.color && showingPlayingCards[index2]!.color != showingPlayingCards[index2]!.color && showingPlayingCards[index3]!.color != showingPlayingCards[index3]!.color)) &&
+            ((showingPlayingCards[index1]!.symbol == showingPlayingCards[index1]!.symbol && showingPlayingCards[index2]!.symbol == showingPlayingCards[index2]!.symbol && showingPlayingCards[index3]!.symbol == showingPlayingCards[index3]!.symbol) ||
+            (showingPlayingCards[index1]!.symbol != showingPlayingCards[index1]!.symbol && showingPlayingCards[index2]!.symbol != showingPlayingCards[index2]!.symbol && showingPlayingCards[index3]!.symbol != showingPlayingCards[index3]!.symbol)) &&
+            ((showingPlayingCards[index1]!.shading == showingPlayingCards[index1]!.shading && showingPlayingCards[index2]!.shading == showingPlayingCards[index2]!.shading && showingPlayingCards[index3]!.shading == showingPlayingCards[index3]!.shading) ||
+            (showingPlayingCards[index1]!.shading != showingPlayingCards[index1]!.shading && showingPlayingCards[index2]!.shading != showingPlayingCards[index2]!.shading && showingPlayingCards[index3]!.shading != showingPlayingCards[index3]!.shading)) &&
+            ((showingPlayingCards[index1]!.number == showingPlayingCards[index1]!.number && showingPlayingCards[index2]!.number == showingPlayingCards[index2]!.number && showingPlayingCards[index3]!.number == showingPlayingCards[index3]!.number) ||
+            (showingPlayingCards[index1]!.number != showingPlayingCards[index1]!.number && showingPlayingCards[index2]!.number != showingPlayingCards[index2]!.number && showingPlayingCards[index3]!.number != showingPlayingCards[index3]!.number))
         {
-            playingCards[index1] = nil
-            playingCards[index2] = nil
-            playingCards[index3] = nil
+            showingPlayingCards[index1] = nil
+            showingPlayingCards[index2] = nil
+            showingPlayingCards[index3] = nil
             return true
         }
         return false
