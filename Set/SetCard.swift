@@ -11,7 +11,7 @@ import UIKit
 class SetCard: UIButton {
     
     enum SelectionState {
-        case deselected, selected, matched, deleted
+        case deselected, selected, matched, deleted, misMatched
     }
     
     var selectionState: SelectionState = .deselected
@@ -25,10 +25,15 @@ class SetCard: UIButton {
             self.layer.borderWidth = 3.0
             self.layer.borderColor = UIColor.blue.cgColor
         case .matched:
-            isEnabled = true
+            isEnabled = false
             selectionState = .matched
             self.layer.borderWidth = 3.0
             self.layer.borderColor = UIColor.cyan.cgColor
+        case .misMatched:
+            isEnabled = false
+            selectionState = .matched
+            self.layer.borderWidth = 3.0
+            self.layer.borderColor = UIColor.red.cgColor
         case .deleted:
             isEnabled = false
             selectionState = .deleted

@@ -13,15 +13,6 @@ class ViewController: UIViewController {
     @IBOutlet var playingCards: [SetCard]!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var dealButton: SetCard!
-//    {
-//        didSet {
-//            let deletedCards = playingCards.filter { $0.selectionState == .deleted }
-//            print(deletedCards.count)
-//            if deletedCards.count == 0 {
-//                DealButton.isEnabled = false
-//            }
-//        }
-//    }
     @IBOutlet weak var newGameButton: UIButton!
     
     var selectedCards = [SetCard]()
@@ -37,8 +28,8 @@ class ViewController: UIViewController {
         for index in 0..<playingCards.count {
             playingCards[index].layer.cornerRadius = 5
         }
-        dealButton.layer.cornerRadius = 5
-        newGameButton.layer.cornerRadius = 5
+        dealButton.layer.cornerRadius = 12
+        newGameButton.layer.cornerRadius = 12
         updateViewFromModel()
     }
     
@@ -48,7 +39,6 @@ class ViewController: UIViewController {
             if playingCards[index].selectionState == .selected {
                 playingCards[index].setState(state: .deselected)
                 selectedCards.removeLast()
-                print(selectedCards.count)
             } else {
                 playingCards[index].setState(state: .selected)
                 selectedCards.append(playingCards[index])
@@ -72,7 +62,6 @@ class ViewController: UIViewController {
                         wasMatchedLastGame = true
                     }
                 }
-                print(game.deck.count)
             }
         }
         
@@ -91,6 +80,7 @@ class ViewController: UIViewController {
     @IBAction func newGame(_ sender: SetCard) {
         game = Set()
         updateViewFromModel()
+        dealButton.isEnabled = true
     }
     
     func updateViewFromModel () {
