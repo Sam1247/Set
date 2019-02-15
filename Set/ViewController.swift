@@ -11,8 +11,8 @@ import UIKit
 class ViewController: UIViewController {
     
     struct SelectedCard {
-        var Cards: [SetCard]
-        var Index: [Int]
+        var Card: SetCard
+        var Index: Int
     }
     
     @IBOutlet var playingCards: [SetCard]!
@@ -21,12 +21,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var newGameButton: UIButton!
     
     var selectedCards = [SelectedCard]()
-    
     var game = Set()
     
-    var wasMatchedLastGame = false
-    
-    var setCards = [Int:Card]()
+    var isLastMatched = false
+    var isLastMisMatched = false
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +46,57 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchCard(_ sender: SetCard) {
-        
+        // reset if 3 cards was selected
+        if isLastMatched {
+            deSelectAllCards()
+            dealMore3Cards()
+            selectedCards.append(SelectedCard(Card: sender, Index: playingCards.index(of: sender)!))
+            sender.setState(state: .selected)
+            isLastMatched = false
+        }
+        if isLastMisMatched {
+            deSelectAllCards()
+            selectedCards.append(SelectedCard(Card: sender, Index: playingCards.index(of: sender)!))
+            sender.setState(state: .deselected)
+            isLastMisMatched = false
+        }
+        // adding or removing selected cards to list and display selection
+        if sender.selectionState == .deselected {
+            selectedCards.append(SelectedCard(Card: sender, Index: playingCards.index(of: sender)!))
+            sender.setState(state: .selected)
+        } else if sender.selectionState == .selected {
+            sender.setState(state: .deselected)
+            selectedCards.removeLast()
+        }
+        // checking for 3 selected cards
+        if selectedCards.count == 3 {
+            if game.isMatched(selectedCards[0].Index,selectedCards[1].Index,selectedCards[2].Index) {
+                playingCards[selectedCards[0].Index].setState(state: .matched)
+                playingCards[selectedCards[1].Index].setState(state: .matched)
+                playingCards[selectedCards[2].Index].setState(state: .matched)
+                selectedCards.removeAll()
+                isLastMatched = true
+            } else {
+                playingCards[selectedCards[0].Index].setState(state: .misMatched)
+                playingCards[selectedCards[1].Index].setState(state: .misMatched)
+                playingCards[selectedCards[2].Index].setState(state: .misMatched)
+                selectedCards.removeAll()
+                isLastMisMatched = true
+            }
+        }
     }
     
     @IBAction func deal(_ sender: SetCard) {
         dealMore3Cards ()
+    }
+    
+    func deSelectAllCards () {
+        
+        for index in playingCards.indices {
+            if game.showingPlayingCards[index] != nil {
+                playingCards[index].setState(state: .deselected)
+            }
+        }
     }
     
     func dealMore3Cards () {
