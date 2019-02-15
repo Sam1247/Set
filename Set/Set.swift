@@ -31,13 +31,9 @@ class Set {
             }
         }
         deck.shuffle()
-        for i in 0..<12 {
-            showingPlayingCards[i] = deck.remove(at: 0)
-        }
     }
     
     func dealMoreCards () {
-        print(deck.count)
         var showingCounter = 0
         for card in showingPlayingCards {
             if card == nil && showingCounter < 3 && deck.count > 0 {

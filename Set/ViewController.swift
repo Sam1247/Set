@@ -10,12 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    struct SelectedCard {
+        var Cards: [SetCard]
+        var Index: [Int]
+    }
+    
     @IBOutlet var playingCards: [SetCard]!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var dealButton: SetCard!
     @IBOutlet weak var newGameButton: UIButton!
     
-    var selectedCards = [SetCard]()
+    var selectedCards = [SelectedCard]()
     
     var game = Set()
     
@@ -25,70 +30,34 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // making all cards deleted
+        for card in playingCards {
+            card.setState(state: .deleted)
+        }
+        // making regtanguars have corners
         for index in 0..<playingCards.count {
             playingCards[index].layer.cornerRadius = 5
         }
         dealButton.layer.cornerRadius = 12
         newGameButton.layer.cornerRadius = 12
-        updateViewFromModel()
+        // initializing 12 cards at begining
+        for _ in 0..<4 {
+            dealMore3Cards()
+        }
     }
     
     @IBAction func touchCard(_ sender: SetCard) {
-        if selectedCards.count < 3 {
-            let index = playingCards.index(of: sender)!
-            if playingCards[index].selectionState == .selected {
-                playingCards[index].setState(state: .deselected)
-                selectedCards.removeLast()
-            } else {
-                playingCards[index].setState(state: .selected)
-                selectedCards.append(playingCards[index])
-                if (wasMatchedLastGame) {
-                    game.dealMoreCards()
-                    updateViewFromModel()
-                    wasMatchedLastGame = false
-                }
-                if selectedCards.count == 3 {
-                    let index1 = playingCards.index(of: selectedCards[0])!
-                    let index2 = playingCards.index(of: selectedCards[1])!
-                    let index3 = playingCards.index(of: selectedCards[2])!
-                    if game.isMatched(index1, index2, index3) {
-                        playingCards[index1].setState(state: .matched)
-                        playingCards[index2].setState(state: .matched)
-                        playingCards[index3].setState(state: .matched)
-                        selectedCards.removeAll()
-                        if (game.deck.count != 0){
-                            dealButton.isEnabled = true
-                        }
-                        wasMatchedLastGame = true
-                    }
-                }
-            }
-        }
         
     }
     
     @IBAction func deal(_ sender: SetCard) {
+        dealMore3Cards ()
+    }
+    
+    func dealMore3Cards () {
         game.dealMoreCards()
-        updateViewFromModel()
-        wasMatchedLastGame = false
-        let deletedCards = playingCards.filter { $0.selectionState == .deleted }
-        if deletedCards.count == 0 || game.deck.count == 0 {
-            dealButton.isEnabled = false
-        }
-    }
-    
-    @IBAction func newGame(_ sender: SetCard) {
-        game = Set()
-        updateViewFromModel()
-        dealButton.isEnabled = true
-    }
-    
-    func updateViewFromModel () {
         for index in playingCards.indices {
-            if game.showingPlayingCards[index] == nil {
-                playingCards[index].setState(state: .deleted)
-            }
-            else if !(playingCards[index].selectionState == .selected) {
+            if game.showingPlayingCards[index] != nil, playingCards[index].selectionState == .deleted {
                 playingCards[index].setState(state: .deselected)
                 let text: String
                 let font = UIFont.systemFont(ofSize: 30)
@@ -155,12 +124,20 @@ class ViewController: UIViewController {
                         attributes[.foregroundColor] = #colorLiteral(red: 0, green: 1, blue: 0, alpha: 1).withAlphaComponent(1.0)
                     }
                 }
-                
                 let attributedString = NSAttributedString(string: text, attributes: attributes)
                 playingCards[index ].setAttributedTitle(attributedString, for: .normal)
             }
-            }
         }
+    }
+    
+    @IBAction func newGame(_ sender: SetCard) {
+       
+    }
+    
+    func updateViewFromModel () {
+        
+        
+    }
         
     
 }

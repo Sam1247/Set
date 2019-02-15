@@ -14,7 +14,7 @@ class SetCard: UIButton {
         case deselected, selected, matched, deleted, misMatched
     }
     
-    var selectionState: SelectionState = .deselected
+    private(set) var selectionState: SelectionState = .deleted
     
     
     func setState(state: SelectionState) {
