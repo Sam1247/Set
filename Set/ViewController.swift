@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     
     var isLastMatched = false
     var isLastMisMatched = false
-
+    var DealWasClicked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,18 +47,30 @@ class ViewController: UIViewController {
     
     @IBAction func touchCard(_ sender: SetCard) {
         // reset if 3 cards was selected
-        if isLastMatched {
+        // matched & pressed on deal button
+        if isLastMatched && !DealWasClicked {
             deSelectAllCards()
             dealMore3Cards()
             selectedCards.append(SelectedCard(Card: sender, Index: playingCards.index(of: sender)!))
             sender.setState(state: .selected)
             isLastMatched = false
+            return
+        // matched & didn't pressed on deal button
+        } else if isLastMatched && DealWasClicked {
+            deSelectAllCards()
+            selectedCards.append(SelectedCard(Card: sender, Index: playingCards.index(of: sender)!))
+            sender.setState(state: .selected)
+            print("fdg")
+            DealWasClicked = false
+            isLastMatched = false
+            return
         }
         if isLastMisMatched {
             deSelectAllCards()
             selectedCards.append(SelectedCard(Card: sender, Index: playingCards.index(of: sender)!))
-            sender.setState(state: .deselected)
+            sender.setState(state: .selected)
             isLastMisMatched = false
+            return
         }
         // adding or removing selected cards to list and display selection
         if sender.selectionState == .deselected {
@@ -75,6 +87,7 @@ class ViewController: UIViewController {
                 playingCards[selectedCards[1].Index].setState(state: .matched)
                 playingCards[selectedCards[2].Index].setState(state: .matched)
                 selectedCards.removeAll()
+                dealButton.isEnabled = game.deck.count != 0 ? true: false
                 isLastMatched = true
             } else {
                 playingCards[selectedCards[0].Index].setState(state: .misMatched)
@@ -84,10 +97,23 @@ class ViewController: UIViewController {
                 isLastMisMatched = true
             }
         }
+        print(selectedCards.count)
     }
     
     @IBAction func deal(_ sender: SetCard) {
         dealMore3Cards ()
+        // checking if deal was pressed and there were 3 cards matched
+        if isLastMatched {
+            DealWasClicked = true
+        }
+        SetDealButtonState()
+    }
+    
+    private func SetDealButtonState () {
+        let deletedCards = playingCards.filter { $0.selectionState == .deleted }
+        if deletedCards.count == 0 {
+            dealButton.isEnabled = false
+        }
     }
     
     func deSelectAllCards () {
@@ -102,8 +128,10 @@ class ViewController: UIViewController {
     func dealMore3Cards () {
         game.dealMoreCards()
         for index in playingCards.indices {
-            if game.showingPlayingCards[index] != nil, playingCards[index].selectionState == .deleted {
-                playingCards[index].setState(state: .deselected)
+            if game.showingPlayingCards[index] != nil {
+                if playingCards[index].selectionState != .selected {
+                    playingCards[index].setState(state: .deselected)
+                }
                 let text: String
                 let font = UIFont.systemFont(ofSize: 30)
                 var attributes : [NSAttributedString.Key : Any] = [
@@ -172,6 +200,9 @@ class ViewController: UIViewController {
                 let attributedString = NSAttributedString(string: text, attributes: attributes)
                 playingCards[index ].setAttributedTitle(attributedString, for: .normal)
             }
+            else {
+                playingCards[index].setState(state: .deleted)
+            }
         }
     }
     
@@ -186,4 +217,3 @@ class ViewController: UIViewController {
         
     
 }
-

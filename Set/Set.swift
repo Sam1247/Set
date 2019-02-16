@@ -74,7 +74,10 @@ class Set {
             showingPlayingCards[index3] = nil
             return true
         }
-        return false
+        showingPlayingCards[index1] = nil
+        showingPlayingCards[index2] = nil
+        showingPlayingCards[index3] = nil
+        return true
     }
     
 }
