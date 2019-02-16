@@ -239,7 +239,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZV2-uz-Ff3"/>
+                                    <action selector="newGameTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DNj-f0-ogB"/>
                                 </connections>
                             </button>
                         </subviews>

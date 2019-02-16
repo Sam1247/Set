@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var newGameButton: UIButton!
     
     var selectedCards = [SelectedCard]()
-    var game = Set()
+    var game: Set = Set()
     
     var isLastMatched = false
     var isLastMisMatched = false
@@ -29,20 +29,13 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // making all cards deleted
-        for card in playingCards {
-            card.setState(state: .deleted)
-        }
+        newGame()
         // making regtanguars have corners
         for index in 0..<playingCards.count {
             playingCards[index].layer.cornerRadius = 5
         }
         dealButton.layer.cornerRadius = 12
         newGameButton.layer.cornerRadius = 12
-        // initializing 12 cards at begining
-        for _ in 0..<4 {
-            dealMore3Cards()
-        }
     }
     
     @IBAction func touchCard(_ sender: SetCard) {
@@ -206,8 +199,19 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func newGame(_ sender: SetCard) {
-       
+    @IBAction func newGameTouch(_ sender: UIButton) {
+        newGame()
+    }
+    
+    func newGame() {
+        game = Set()
+        for card in playingCards {
+            card.setState(state: .deleted)
+        }
+        // initializing 12 cards at begining
+        for _ in 0..<4 {
+            dealMore3Cards()
+        }
     }
     
     func updateViewFromModel () {
